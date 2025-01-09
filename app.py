@@ -23,7 +23,7 @@ def mirror(id):
             if css_link:
                 css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
             
-            # Replace GitHub icon with Telegram icon in the header
+            # Prepare the Telegram icon HTML directly
             telegram_icon_svg = '''
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644" alt="Telegram Icon" width="24" height="24">
             '''
@@ -35,8 +35,10 @@ def mirror(id):
                 # Replace the GitHub icon section with the Telegram link
                 telegram_anchor = header.find('a', {'id': 'header_right'})
                 if telegram_anchor:
-                    telegram_anchor.replace_with(telegram_link)  # Ensure it's replaced with the full Telegram link
-            
+                    # Directly replace the HTML with the new content
+                    telegram_anchor.insert_before(telegram_link)  # Insert the link with the icon before the current content
+                    telegram_anchor.decompose()  # Remove the existing link with GitHub
+                
             # Convert the modified HTML back to a string
             modified_html = str(soup)
             
