@@ -69,7 +69,7 @@ def mirror(id):
         print(f"An error occurred: {str(e)}")  # Log exceptions
         return f"An error occurred: {str(e)}", 500
 
-@app.route('/download/torrent/<id>/<text>')
+@app.route('/nyaasi_archive/<id>/<text>')
 def download_torrent(id, text):
     # Construct the real torrent URL from animetosho
     torrent_url = f"http://storage.animetosho.org/nyaasi_archive/{id}/{text}"
