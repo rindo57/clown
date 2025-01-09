@@ -18,26 +18,19 @@ def mirror(id):
             # Parse the HTML content
             soup = BeautifulSoup(response.content, 'html.parser')
             
-            # Find the CSS link tag and update its href attribute
+            # 1. Find the CSS link tag and update its href attribute
             css_link = soup.find('link', rel='stylesheet')
             if css_link:
                 css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
             
-            # Prepare the Telegram icon HTML directly
-            telegram_icon_svg = '''
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644" alt="Telegram Icon" width="24" height="24">
-            '''
-            telegram_link = f'<a id="header_right" href="https://t.me/nyaatorrents">{telegram_icon_svg}</a>'
-            
-            # Modify the header to replace GitHub with Telegram
-            header = soup.find('header')
-            if header:
-                # Replace the GitHub icon section with the Telegram link
-                telegram_anchor = header.find('a', {'id': 'header_right'})
-                if telegram_anchor:
-                    # Directly replace the HTML with the new content
-                    telegram_anchor.insert_before(telegram_link)  # Insert the link with the icon before the current content
-                    telegram_anchor.decompose()  # Remove the existing link with GitHub
+            # 2. Find the GitHub link and replace it with the Telegram link and icon
+            github_link = soup.find('a', id='header_right')
+            if github_link:
+                github_link['href'] = 'https://t.me/nyaatorrents'  # Change to Telegram URL
+                telegram_icon = soup.new_tag('img', src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644', alt='Telegram')
+                telegram_icon['id'] = 'tg_icon'  # Optional: Add an ID for the icon
+                github_link.clear()  # Clear the existing content (GitHub icon)
+                github_link.append(telegram_icon)  # Append the Telegram icon
                 
             # Convert the modified HTML back to a string
             modified_html = str(soup)
