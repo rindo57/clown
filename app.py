@@ -70,6 +70,28 @@ def mirror(id):
         print(f"An error occurred: {str(e)}")  # Log exceptions
         return f"An error occurred: {str(e)}", 500
 
+# Direct Streaming
+
+@app.route('/nyaasi_archive/<id>/<text>')
+def download_torrent(id, text):
+    # Construct the real torrent URL from Animetosho
+    torrent_url = f"http://storage.animetosho.org/nyaasi_archive/{id}/{text}"
+    
+    # Fetch the torrent file from Animetosho and stream it directly to the user
+    try:
+        response = requests.get(torrent_url, stream=True)
+        
+        if response.status_code == 200:
+            # Stream the file directly to the user
+            return Response(response.iter_content(1024), 
+                            content_type="application/x-bittorrent", 
+                            headers={"Content-Disposition": f"attachment; filename={id}.torrent"})
+        else:
+            return f"Error fetching the torrent file: {response.status_code}", response.status_code
+    except requests.exceptions.RequestException as e:
+        return f"An error occurred: {str(e)}", 500
+
+"""
 @app.route('/nyaasi_archive/<id>/<text>')
 def download_torrent(id, text):
     # Construct the real torrent URL from animetosho
@@ -91,5 +113,6 @@ def download_torrent(id, text):
     
     else:
         return f"Error fetching the torrent file: {response.status_code}", response.status_code
+"""
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
