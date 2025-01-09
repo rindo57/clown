@@ -22,7 +22,7 @@ def mirror(id):
             # Find and update the CSS link tag
             css_link = soup.find('link', rel='stylesheet')
             if css_link:
-                css_link['href'] = 'https://pastebin.com/raw/3dfVDX5S'
+                css_link['href'] = '/pizza.css'
             
             # Find and remove the "Anime Tosho" link
             header_left = soup.find('span', id='header_left')
