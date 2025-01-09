@@ -18,12 +18,12 @@ def mirror(id):
             # Parse the HTML content
             soup = BeautifulSoup(response.content, 'html.parser')
             
-            # 1. Find the CSS link tag and update its href attribute
+            # Find and update the CSS link tag
             css_link = soup.find('link', rel='stylesheet')
             if css_link:
                 css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
             
-            # 2. Find and remove the "Anime Tosho" link
+            # Find and remove the "Anime Tosho" link
             header_left = soup.find('span', id='header_left')
             if header_left:
                 anime_tosho_link = header_left.find('a', href='https://animetosho.org/')
@@ -35,7 +35,14 @@ def mirror(id):
                 if nyaa_si_cache_link:
                     nyaa_si_cache_link['href'] = 'https://nyaa.si'  # Update href to "https://nyaa.si"
             
-            # 3. Find the GitHub link and replace it with the Telegram link and icon
+            # Modify the "Download Torrent" link by changing only the domain
+            torrent_link = soup.find('a', href=True, text="Download Torrent")
+            if torrent_link:
+                original_torrent_url = torrent_link['href']
+                if "https://storage.animetosho.org/" in original_torrent_url:
+                    torrent_link['href'] = original_torrent_url.replace("https://storage.animetosho.org/", "http://172.172.212.6/")
+
+            # Find the GitHub link and replace it with the Telegram link and icon
             github_link = soup.find('a', id='header_right')
             if github_link:
                 github_link['href'] = 'https://t.me/nyaatorrents'  # Change to Telegram URL
@@ -60,5 +67,26 @@ def mirror(id):
         print(f"An error occurred: {str(e)}")  # Log exceptions
         return f"An error occurred: {str(e)}", 500
 
+@app.route('/download/torrent/<id>/<text>')
+def download_torrent(id, text):
+    # Construct the real torrent URL from animetosho
+    torrent_url = f"http://storage.animetosho.org/nyaasi_archive/{id}/{text}"
+    # Fetch the torrent file from animetosho
+    response = requests.get(torrent_url, stream=True)
+
+    if response.status_code == 200:
+        # Create a temporary file to stream the content to the user
+        temp_file = os.path.join("/tmp", f"{id}.torrent")
+        
+        # Write the content to the temporary file
+        with open(temp_file, 'wb') as f:
+            for chunk in response.iter_content(1024):
+                f.write(chunk)
+        
+        # Send the file as a response
+        return send_file(temp_file, as_attachment=True, download_name=f"{id}.torrent", mimetype="application/x-bittorrent")
+    
+    else:
+        return f"Error fetching the torrent file: {response.status_code}", response.status_code
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80, debug=True)
