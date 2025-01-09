@@ -27,8 +27,12 @@ def mirror(id):
             github_link = soup.find('a', id='header_right')
             if github_link:
                 github_link['href'] = 'https://t.me/nyaatorrents'  # Change to Telegram URL
-                telegram_icon = soup.new_tag('img', src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644', alt='Telegram')
+                telegram_icon = soup.new_tag('img', 
+                                             src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644', 
+                                             alt='Telegram')
                 telegram_icon['id'] = 'tg_icon'  # Optional: Add an ID for the icon
+                telegram_icon['width'] = '32'  # Set the width to 32px
+                telegram_icon['height'] = '32'  # Set the height to 32px
                 github_link.clear()  # Clear the existing content (GitHub icon)
                 github_link.append(telegram_icon)  # Append the Telegram icon
                 
