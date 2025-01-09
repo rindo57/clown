@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/view/<id>')
 def mirror(id):
-    url = f'https://cache.animetosho.org/nyaasi/view/{id}'
+    url = f'https://cache.animetosho.org/nyaasi/view/?id={id}'
     
     try:
         print(f"Fetching URL: {url}")  # Log the URL being fetched
