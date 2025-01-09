@@ -1,6 +1,10 @@
 from flask import Flask, Response
 import requests
 
+from flask import Flask, Response
+import requests
+from bs4 import BeautifulSoup
+
 app = Flask(__name__)
 
 @app.route('/view/<id>')
@@ -14,7 +18,18 @@ def mirror(id):
         print(f"Response Code: {response.status_code}")  # Log the response code
 
         if response.status_code == 200:
-            return Response(response.content, content_type=response.headers['Content-Type'])
+            # Parse the HTML content
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            # Find the CSS link tag and update its href attribute
+            css_link = soup.find('link', rel='stylesheet')
+            if css_link:
+                css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
+            
+            # Convert the modified HTML back to a string
+            modified_html = str(soup)
+            
+            return Response(modified_html, content_type='text/html')
         else:
             print(f"Error fetching the content: {response.status_code}")  # Log error details
             return f"Error fetching the content: {response.status_code}", response.status_code
