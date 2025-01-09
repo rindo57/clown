@@ -34,13 +34,15 @@ def mirror(id):
                 nyaa_si_cache_link = header_left.find('a', href='/nyaasi/')
                 if nyaa_si_cache_link:
                     nyaa_si_cache_link['href'] = 'https://nyaa.si'  # Update href to "https://nyaa.si"
-            
+
             # Modify the "Download Torrent" link by changing only the domain
-            torrent_link = soup.find('a', href=True, text="Download Torrent")
+            torrent_link = soup.find('a', href=True, string="Download Torrent")
             if torrent_link:
                 original_torrent_url = torrent_link['href']
                 if "https://storage.animetosho.org/" in original_torrent_url:
                     torrent_link['href'] = original_torrent_url.replace("https://storage.animetosho.org/", "http://172.172.212.6/")
+
+
 
             # Find the GitHub link and replace it with the Telegram link and icon
             github_link = soup.find('a', id='header_right')
