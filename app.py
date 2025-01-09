@@ -36,7 +36,7 @@ def mirror(id):
                     nyaa_si_cache_link['href'] = 'https://nyaa.si'  # Update href to "https://nyaa.si"
 
             # Modify the "Download Torrent" link by changing only the domain
-            torrent_link = soup.find('a', href=True, string="Download Torrent")
+            torrent_link = soup.find('a', href=True, string="📄 Download Torrent")
             if torrent_link:
                 original_torrent_url = torrent_link['href']
                 if "https://storage.animetosho.org/" in original_torrent_url:
