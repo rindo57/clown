@@ -1,8 +1,5 @@
 from flask import Flask, Response
 import requests
-
-from flask import Flask, Response
-import requests
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
@@ -25,6 +22,19 @@ def mirror(id):
             css_link = soup.find('link', rel='stylesheet')
             if css_link:
                 css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
+            
+            # Replace GitHub icon with Telegram icon in the header
+            telegram_icon_svg = '''
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png?20220101141644" alt="Telegram Icon" width="24" height="24">
+
+            '''
+            telegram_link = '<a id="header_right" href="https://t.me/nyaatorrents">' + telegram_icon_svg + '</a>'
+            
+            # Modify the header to replace GitHub with Telegram
+            header = soup.find('header')
+            if header:
+                # Replace the GitHub icon section with the Telegram link
+                header.find('a', {'id': 'header_right'}).replace_with(telegram_link)
             
             # Convert the modified HTML back to a string
             modified_html = str(soup)
