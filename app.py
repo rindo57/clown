@@ -23,7 +23,14 @@ def mirror(id):
             if css_link:
                 css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
             
-            # 2. Find the GitHub link and replace it with the Telegram link and icon
+            # 2. Find and remove the "Anime Tosho" link
+            header_left = soup.find('span', id='header_left')
+            if header_left:
+                anime_tosho_link = header_left.find('a', href='https://animetosho.org/')
+                if anime_tosho_link:
+                    anime_tosho_link.decompose()  # Removes the "Anime Tosho" link completely
+                
+            # 3. Find the GitHub link and replace it with the Telegram link and icon
             github_link = soup.find('a', id='header_right')
             if github_link:
                 github_link['href'] = 'https://t.me/nyaatorrents'  # Change to Telegram URL
