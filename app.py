@@ -30,6 +30,11 @@ def mirror(id):
                 if anime_tosho_link:
                     anime_tosho_link.decompose()  # Removes the "Anime Tosho" link completely
                 
+                # Replace the "Nyaa.si Cache" link with the new URL
+                nyaa_si_cache_link = header_left.find('a', href='/nyaasi/')
+                if nyaa_si_cache_link:
+                    nyaa_si_cache_link['href'] = 'https://nyaa.si'  # Update href to "https://nyaa.si"
+            
             # 3. Find the GitHub link and replace it with the Telegram link and icon
             github_link = soup.find('a', id='header_right')
             if github_link:
