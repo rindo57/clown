@@ -22,7 +22,7 @@ def mirror(id):
             # Find and update the CSS link tag
             css_link = soup.find('link', rel='stylesheet')
             if css_link:
-                css_link['href'] = 'https://cache.animetosho.org/style.css?t=1719980696049.208'
+                css_link['href'] = 'https://pastebin.com/raw/3dfVDX5S'
             
             # Find and remove the "Anime Tosho" link
             header_left = soup.find('span', id='header_left')
@@ -41,7 +41,7 @@ def mirror(id):
             if torrent_link:
                 original_torrent_url = torrent_link['href']
                 if "https://storage.animetosho.org/" in original_torrent_url:
-                    torrent_link['href'] = original_torrent_url.replace("https://storage.animetosho.org/", "http://172.172.212.6/")
+                    torrent_link['href'] = original_torrent_url.replace("https://storage.animetosho.org/", "https://cache.ddlserverv1.me.in/")
 
 
 
